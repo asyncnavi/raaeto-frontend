@@ -5,10 +5,13 @@ import { useForm } from "react-hook-form";
 import { CreateProductForm as TCreateProductForm } from "../../types/product";
 import Nope from "nope-validator";
 import { nopeResolver } from "@hookform/resolvers/nope/src/nope.js";
+import { useCreateProduct } from "../../api/product";
+import LoadingOverlay from "../../ui/loadingOverlay";
 
 type Props = {
   opened: boolean;
   trigger: () => void;
+  organizationId: string;
 };
 
 const formSchema = Nope.object().shape({
@@ -17,34 +20,63 @@ const formSchema = Nope.object().shape({
   logo_url: Nope.string(),
   thumbnail_url: Nope.string(),
 });
-const CreateProductForm = () => {
-  const { register } = useForm<TCreateProductForm>({
+const CreateProductForm: FC<{ organizationId: string }> = ({
+  organizationId,
+}) => {
+  const { register, formState, handleSubmit } = useForm<TCreateProductForm>({
     resolver: nopeResolver(formSchema),
   });
 
-  return (
-    <div className="w-full flex flex-col space-y-4">
-      <h2 className="text-2xl">Create New Product.</h2>
-      <input
-        {...register("name")}
-        className="outline-0 border p-4 w-full"
-        placeholder="Name of your product"
-      />
-      <textarea
-        {...register("description")}
-        className="outline-0 border p-4 w-full"
-        placeholder="Add description for your product"
-      />
+  const [createProduct, { isLoading }] = useCreateProduct();
 
-      <button className="w-full flex items-center gap-2 justify-center outline-none border-2 border-black px-5 py-2 bg-lime-300 font-semibold">
+  const handleFormSubmission = (values: TCreateProductForm) => {
+    
+    createProduct({ ...values, organization_id: `${organizationId}` });
+  };
+
+  return (
+    <form
+      onClick={handleSubmit(handleFormSubmission)}
+      className="w-full flex flex-col space-y-4"
+    >
+      <LoadingOverlay loading={isLoading} />
+      <h2 className="text-2xl">Create New Product.</h2>
+      <div>
+        <input
+          {...register("name")}
+          className="outline-0 border p-4 w-full"
+          placeholder="Name of your product"
+        />
+        {formState.errors.name && (
+          <small className="text-red-400">
+            {formState.errors.name.message}
+          </small>
+        )}
+      </div>
+      <div>
+        <textarea
+          {...register("description")}
+          className="outline-0 border p-4 w-full"
+          placeholder="Add description for your product"
+        />
+        {formState.errors.description && (
+          <small className="text-red-400">
+            {formState.errors.description.message}
+          </small>
+        )}
+      </div>
+      <button
+        type="submit"
+        className="w-full flex items-center gap-2 justify-center outline-none border-2 border-black px-5 py-2 bg-lime-300 font-semibold"
+      >
         Continue
         <IconArrowRight />
       </button>
-    </div>
+    </form>
   );
 };
 
-const CreateProductModal: FC<Props> = ({ opened, trigger }) => {
+const CreateProductModal: FC<Props> = ({ opened, trigger , organizationId}) => {
   const modelRef = useDetectClickOutside({
     onOutsideClick: trigger,
     isActive: opened,
@@ -55,7 +87,7 @@ const CreateProductModal: FC<Props> = ({ opened, trigger }) => {
       {opened && (
         <div className="absolute top-0 left-0 bottom-0 bg-[rgba(256,256,256,0.90)] w-full h-full flex justify-center items-center">
           <div
-            ref={modelRef}
+            ref={modelRef }
             className="w-full max-w-[400px] border-2 border-black bg-white p-4 space-y-5"
           >
             <div
@@ -64,7 +96,7 @@ const CreateProductModal: FC<Props> = ({ opened, trigger }) => {
             >
               <IconX />
             </div>
-            <CreateProductForm />
+            <CreateProductForm organizationId={organizationId} />
           </div>
         </div>
       )}

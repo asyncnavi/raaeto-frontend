@@ -23,6 +23,7 @@ const ProductList = () => {
     <div className="container mx-auto space-y-6">
       <LoadingOverlay loading={isLoading} />
       <CreateProductModal
+        organizationId={orgId ?? ''}
         opened={createProductModal}
         trigger={triggerProductModal}
       />
@@ -36,7 +37,7 @@ const ProductList = () => {
           <IconPlus />
         </button>
       </div>
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 px-4">
         {products?.map(({ name, description }) => {
           return (
             <div className="border-2 border-black p-4 space-y-2 shadow-[8px_8px_#a3e635] cursor-pointer hover:shadow-none transit ease-in .3s">

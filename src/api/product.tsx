@@ -7,6 +7,7 @@ export const productApi = createApi({
   baseQuery: axiosBaseQuery({
     baseUrl: BASE_URL + "/product",
   }),
+  tagTypes: ["Products"],
   endpoints: (build) => ({
     createProduct: build.mutation<CreateProductResponse, CreateProduct>({
       query: (input) => ({
@@ -16,6 +17,7 @@ export const productApi = createApi({
       }),
     }),
   }),
+  invalidatesTags: ["Products"],
 });
 
 export const { useCreateProductMutation: useCreateProduct } = productApi;
