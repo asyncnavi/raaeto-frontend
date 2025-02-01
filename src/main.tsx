@@ -5,13 +5,14 @@ import "./index.css";
 import HomePage from "./pages/home/page";
 import RootLayout from "./pages/layout";
 import AuthLayout from "./pages/authentication/layout";
-import SigninPage from "./pages/authentication/signin";
-import SignupPage from "./pages/authentication/signup";
+import SigninPage from "./pages/authentication/signIn.tsx";
+import SignupPage from "./pages/authentication/signUp.tsx";
 import { Provider } from "react-redux";
 import { store } from "./store";
 import DashboardLayout from "./pages/dashboard/layout";
-import ProductList from "./pages/dashboard/productList";
-import SingeleProductPage from "./pages/product/singleProduct";
+import ProductList from "./pages/product/list.tsx";
+import ProductDetail from "./pages/product/detail.tsx";
+import {HeroUIProvider} from "@heroui/react";
 
 const router = createBrowserRouter([
   {
@@ -38,7 +39,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/product/:id",
-        element : <SingeleProductPage />
+        element : <ProductDetail />
       },
     ],
   },
@@ -47,7 +48,9 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Provider store={store}>
-      <RouterProvider router={router} />
+      <HeroUIProvider>
+        <RouterProvider router={router} />
+      </HeroUIProvider>
     </Provider>
   </StrictMode>,
 );

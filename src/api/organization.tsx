@@ -4,7 +4,7 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 
 export interface Organization {
   name: string;
-  organization_id: string | null;
+  id: string | null;
 }
 
 export const organizationApi = createApi({

@@ -1,5 +1,8 @@
 import { Outlet, useNavigate } from "react-router-dom";
 import { ClerkProvider } from "@clerk/clerk-react";
+import {useEffect} from "react";
+import {useAppDispatch} from "../store";
+import {fetchOrganization} from "../store/slices/organization.ts";
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
@@ -9,6 +12,11 @@ if (!PUBLISHABLE_KEY) {
 
 export default function RootLayout() {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    dispatch(fetchOrganization())
+  }, [dispatch]);
 
   return (
     <ClerkProvider

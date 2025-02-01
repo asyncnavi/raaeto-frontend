@@ -1,5 +1,5 @@
 import { SignIn } from "@clerk/clerk-react";
 
-export default function SigninPage() {
+export default function SignInPage() {
   return <SignIn path="/auth/signin" />;
 }
