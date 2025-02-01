@@ -1,101 +1,98 @@
-import { useUser } from "@clerk/clerk-react";
-import { IconChevronDown, IconUser } from "@tabler/icons-react";
-import { FC, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import CreateOrganizationModal from "./createOrganizationModal";
-import { useGetUserOrganization } from "../api/organization";
-import LoadingOverlay from "../ui/loadingOverlay";
+import React from "react";
+import {
+    Navbar,
+    NavbarBrand,
+    NavbarContent,
+    NavbarItem,
+    NavbarMenuToggle,
+    Button,
+    Dropdown,
+    DropdownTrigger,
+    DropdownMenu,
+    DropdownItem, User,
+    Link as HeroLink
+} from "@heroui/react";
+import {Link} from 'react-router-dom'
+import {useUser, useClerk } from "@clerk/clerk-react";
 
-type ProfileMenuProps = {
-  name: string;
-  email: string;
-};
 
-// TODO : Create profile dropdown
-const ProfileMenu: FC<ProfileMenuProps> = ({ name, email }) => {
-  return (
-    <div className="flex gap-2 items-center cursor-pointer hover:bg-gray-50 p-2">
-      <div className="border border-black w-8 h-8 flex justify-center items-center rounded-full">
-        <IconUser />
-      </div>
-      <div className="flex flex-col">
-        <span className="text-sm">{name}</span>
-        <span className="text-xs">{email}</span>
-      </div>
-      <div className="border  w-5 h-5 flex justify-center items-center rounded-full">
-        <IconChevronDown />
-      </div>
-    </div>
-  );
-};
+export default function Header() {
+    const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+    const {isSignedIn, user } = useUser();
+    const { signOut } = useClerk();
 
-// TODO : Create profile dropdown
-const Header = () => {
-  const [createModal, setCreateModal] = useState(false);
-  const { isSignedIn, user, isLoaded } = useUser();
-  const { pathname } = useLocation();
-  const { data: organization, isLoading } = useGetUserOrganization();
 
-  const triggerCreateModal = () => setCreateModal(!createModal);
-  return (
-    <header className="w-full border-b-2 border-black py-4  top-0 bg-white">
-      <LoadingOverlay loading={isLoading || !isLoaded} />
-      <CreateOrganizationModal
-        opened={createModal}
-        trigger={triggerCreateModal}
-      />
-      <div className="container mx-auto flex justify-between">
-        <Link to="/" className="font-bold font-['Gorditas'] text-4xl">
-          {" "}
-          Raateo{" "}
-        </Link>
-        {!isSignedIn ? (
-          <div className="flex gap-2">
-            <Link
-              to="/auth/signin"
-              className="outline-none border-2 border-black px-4 py-2 bg-lime-300 font-semibold hover:shadow-[4px_4px_black]"
-            >
-              Login
-            </Link>
-            <Link
-              to="/auth/signup"
-              className="outline-none border-2 border-black px-4 py-2  font-semibold hover:shadow-[4px_4px_black]"
-            >
-              Signup
-            </Link>
-          </div>
-        ) : (
-          <div className="flex">
-            {pathname != "/dashboard" && (
-              <>
-                {" "}
-                {organization ? (
-                  <Link
-                    to="/dashboard"
-                    className="outline-none border-2 border-black px-2 py-1 bg-lime-300 font-semibold text-sm flex items-center"
-                  >
-                    Go to Dashboard
-                  </Link>
-                ) : (
-                  <button
-                    onClick={triggerCreateModal}
-                    className="outline-none border-2 border-black px-5 py-2 bg-lime-300 font-semibold"
-                  >
-                    Create Organization
-                  </button>
-                )}{" "}
-              </>
-            )}
+    return (
+        <Navbar isBordered maxWidth="2xl" onMenuOpenChange={setIsMenuOpen}>
+            <NavbarContent className="space-x-4">
+                <NavbarMenuToggle
+                    aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+                    className="sm:hidden"
+                />
+                <NavbarBrand>
+                    <Link to="/" className="font-bold text-2xl text-inherit">RateO</Link>
+                </NavbarBrand>
+            </NavbarContent>
 
-            <ProfileMenu
-              name={user.firstName as string}
-              email={user.primaryEmailAddress?.emailAddress ?? ""}
-            />
-          </div>
-        )}
-      </div>
-    </header>
-  );
-};
+            <NavbarContent className="hidden sm:flex gap-4" justify="center">
+                <NavbarItem>
+                    <Link color="foreground" to="#">
+                        Features
+                    </Link>
+                </NavbarItem>
+                <NavbarItem isActive>
+                    <Link aria-current="page" to="#">
+                        Companies
+                    </Link>
+                </NavbarItem>
 
-export default Header;
+            </NavbarContent>
+
+
+            {
+                !isSignedIn ? (<NavbarContent justify="end">
+                    <NavbarItem className="hidden lg:flex">
+                        <Link to="/auth/signin">Login</Link>
+                    </NavbarItem>
+                    <NavbarItem>
+                        <Button as={Link} color="primary" to="/auth/signup" variant="flat">
+                            Sign Up
+                        </Button>
+                    </NavbarItem>
+                </NavbarContent>) : (
+
+                    <NavbarContent as="div" justify="end">
+                        <Dropdown placement="bottom-end">
+                            <DropdownTrigger>
+                                <User
+                                    avatarProps={{
+                                        src: "https://i.pravatar.cc/150?u=a04258114e29026702d",
+                                        isBordered : true,
+                                        size : "sm",
+                                        color  : "success",
+                                    }}
+                                    description={user?.primaryEmailAddress?.emailAddress}
+                                    name={user?.firstName}
+                                />
+                            </DropdownTrigger>
+                            <DropdownMenu aria-label="Profile Actions" variant="flat">
+                                <DropdownItem key="profile" className="h-14 gap-2">
+                                    <p className="font-semibold">Signed in as</p>
+                                    <p className="font-semibold">{user?.primaryEmailAddress?.emailAddress}</p>
+                                </DropdownItem>
+                                <DropdownItem as={HeroLink} href="/dashboard" key="organization">Organization</DropdownItem>
+                                <DropdownItem key="team_settings">Preference</DropdownItem>
+                                <DropdownItem key="help_and_feedback">My Profile</DropdownItem>
+                                <DropdownItem onPress={() =>signOut()} key="logout" color="danger">
+                                    Log Out
+                                </DropdownItem>
+                            </DropdownMenu>
+                        </Dropdown>
+                    </NavbarContent>
+                )
+            }
+
+        </Navbar>
+    );
+}
+

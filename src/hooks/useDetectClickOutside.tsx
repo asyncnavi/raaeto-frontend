@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from "react";
+import {useEffect, useRef, useCallback, RefObject} from "react";
 
 type UseDetectClickOutsideProps = {
   onOutsideClick: (event: MouseEvent | TouchEvent) => void;
@@ -8,7 +8,7 @@ type UseDetectClickOutsideProps = {
 const useDetectClickOutside = <T extends HTMLElement>({
   onOutsideClick,
   isActive,
-}: UseDetectClickOutsideProps) => {
+}: UseDetectClickOutsideProps) : RefObject<T> => {
   const ref = useRef<T>(null);
 
   const handleClickOutside = useCallback(

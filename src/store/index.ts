@@ -2,16 +2,21 @@ import { organizationApi } from "../api/organization";
 import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
 import { productApi } from "../api/product";
+import organizationSlice from "./slices/organization.ts";
+import {featureApi} from "../api/feature.tsx";
 
 export const store = configureStore({
   reducer: {
     [organizationApi.reducerPath]: organizationApi.reducer,
     [productApi.reducerPath]: productApi.reducer,
+    [organizationSlice.name]: organizationSlice.reducer,
+    [featureApi.reducerPath] : featureApi.reducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
       organizationApi.middleware,
       productApi.middleware,
+      featureApi.middleware
     ),
 });
 
