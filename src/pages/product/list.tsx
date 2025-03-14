@@ -1,29 +1,29 @@
 import {IconPlus} from "@tabler/icons-react";
-import {useGetUserOrganization, useGetProducts} from "../../api/organization";
+import { useGetProducts} from "../../api/organization";
 import ProductCard, {ProductCardSkeleton} from "./productCard.tsx";
 import {Button, useDisclosure} from "@heroui/react";
 import CreateProductModal from "./createProductModal.tsx";
+import {RootState} from "../../store";
+import {useSelector} from "react-redux";
 
 const ProductList = () => {
+    const { isOpen, onOpen, onOpenChange } = useDisclosure();
+    const { id: orgId, status } = useSelector((state: RootState) => state.organization);
 
-    const {isOpen, onOpen, onOpenChange} = useDisclosure();
+    const { data: products, isLoading } = useGetProducts({
+        org_id : orgId ?? "",
+    }, {
+        skip: !orgId,
+    });
 
-    const {data: organization, isLoading} = useGetUserOrganization();
-
-    const orgId = organization?.id;
-
-    const {data: products} = useGetProducts(
-        {
-            organization_id: orgId as string,
-        },
-        {skip: !orgId},
-    );
-
+    if (status === "loading" || !orgId) {
+        return <p>Loading organization...</p>;
+    }
 
     return (
         <div className="space-y-10">
 
-            <CreateProductModal organizationId={organization?.id ?? ""} isOpen={isOpen} onOpen={onOpen}
+            <CreateProductModal organizationId={orgId ?? ""} isOpen={isOpen} onOpen={onOpen}
                                 onOpenChange={onOpenChange}/>
 
             <div className="w-full flex justify-end">

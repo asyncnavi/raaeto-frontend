@@ -60,11 +60,10 @@ const CreateFeatureForm = () => {
     const { id : productId } = useParams()
 
     const [createFeature] = useCreateFeature()
-    const {id: organizationId} = useSelector((root: RootState) => root.organizationStore)
+    const {id: organizationId} = useSelector((root: RootState) => root.organization)
 
 
     const handleFormSubmission = async (values: FeatureCreateFields) => {
-
         createFeature({
             ...values,
             organization_id: organizationId?.toString() as string,

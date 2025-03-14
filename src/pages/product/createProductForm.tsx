@@ -4,9 +4,9 @@ import { useForm } from "react-hook-form";
 import { CreateProductForm as TCreateProductForm } from "../../types/product";
 import Nope from "nope-validator";
 import { nopeResolver } from "@hookform/resolvers/nope/src/nope.js";
-import { useCreateProduct } from "../../api/product";
 import LoadingOverlay from "../../ui/loadingOverlay";
 import {Button, Input, Textarea} from "@heroui/react";
+import {useCreateProduct} from "../../api/organization.tsx";
 
 
 const formSchema = Nope.object().shape({
@@ -32,7 +32,7 @@ export const CreateProductForm: FC<{ organizationId: string }> = ({
 
     return (
         <form
-            onClick={handleSubmit(handleFormSubmission)}
+            onSubmit={handleSubmit(handleFormSubmission)}
             className="w-full flex flex-col space-y-4"
         >
             <LoadingOverlay loading={isLoading} />

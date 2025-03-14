@@ -5,7 +5,7 @@ import {Feature, FeatureCreate} from "../types/feature.ts";
 export const featureApi = createApi({
     reducerPath: "featureApi",
     baseQuery: axiosBaseQuery({
-        baseUrl: BASE_URL + "/feature",
+        baseUrl: BASE_URL + "/features",
     }),
     tagTypes: ["Features"],
     endpoints: (build) => ({

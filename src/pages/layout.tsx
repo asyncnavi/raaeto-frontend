@@ -1,6 +1,6 @@
 import { Outlet, useNavigate } from "react-router-dom";
 import { ClerkProvider } from "@clerk/clerk-react";
-import {useEffect} from "react";
+import  {useEffect} from "react";
 import {useAppDispatch} from "../store";
 import {fetchOrganization} from "../store/slices/organization.ts";
 
@@ -15,8 +15,8 @@ export default function RootLayout() {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    dispatch(fetchOrganization())
-  }, [dispatch]);
+    dispatch(fetchOrganization());
+  });
 
   return (
     <ClerkProvider
@@ -25,6 +25,8 @@ export default function RootLayout() {
       publishableKey={PUBLISHABLE_KEY}
     >
       <Outlet />
+
+
     </ClerkProvider>
   );
 }

@@ -56,7 +56,6 @@ const ProductDetail = () => {
                         <Tab key="settings" title="Settings">
                             Heee
                         </Tab>
-
                     </Tabs>
                 </div>
             </main>
