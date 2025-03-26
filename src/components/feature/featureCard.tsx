@@ -5,20 +5,19 @@ type FeatureCardProps = {
     name: string;
     description: string;
     websiteURL?: string;
-    id: string
+    id: string;
+    onClick?: () => void
 
 }
-// TODO : create Option to add Website URL
 
 export default function FeatureCard({
                                         name,
                                         description,
-                                        id
+                                        onClick,
                                     }: FeatureCardProps) {
     return (
         <Card className="max-w-[400px]">
             <CardHeader className="flex gap-3">
-
                 <div className="flex flex-col">
                     <p className="text-md font-bold">{name}</p>
                 </div>
@@ -29,7 +28,7 @@ export default function FeatureCard({
             </CardBody>
             <Divider/>
             <CardFooter className="flex justify-between">
-                <Link href={`/feature/${id}`}>
+                <Link onPress={onClick}>
                     View Details
                 </Link>
             </CardFooter>

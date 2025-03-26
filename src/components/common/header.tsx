@@ -34,20 +34,6 @@ export default function Header() {
                 </NavbarBrand>
             </NavbarContent>
 
-            <NavbarContent className="hidden sm:flex gap-4" justify="center">
-                <NavbarItem>
-                    <Link color="foreground" to="#">
-                        Features
-                    </Link>
-                </NavbarItem>
-                <NavbarItem isActive>
-                    <Link aria-current="page" to="#">
-                        Companies
-                    </Link>
-                </NavbarItem>
-
-            </NavbarContent>
-
 
             {
                 !isSignedIn ? (<NavbarContent justify="end">

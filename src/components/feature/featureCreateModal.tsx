@@ -1,3 +1,4 @@
+
 import {
     Modal,
     ModalContent,
@@ -5,14 +6,14 @@ import {
     ModalBody, Button, Input, Textarea
 } from "@heroui/react";
 import {IconArrowRight} from "@tabler/icons-react";
-import {FeatureCreateFields, FeatureStatus} from "../../../types/feature.ts";
 import {useForm} from "react-hook-form";
 import Nope from "nope-validator";
 import {nopeResolver} from "@hookform/resolvers/nope";
-import {useCreateFeature} from "../../../api/feature.tsx";
-import {RootState} from "../../../store";
 import {useSelector} from "react-redux";
 import {useParams} from "react-router-dom";
+import {FeatureCreateFields, FeatureStatus} from "../../types/feature.ts";
+import {RootState} from "../../store";
+import {useCreateFeature} from "../../api/feature.tsx";
 
 
 type Props = {
@@ -21,7 +22,7 @@ type Props = {
     onOpenChange: (isOpen: boolean) => void;
 }
 
-export default function CreateFeatureModal({isOpen, onOpenChange}: Props) {
+export default function FeatureCreateModal({isOpen, onOpenChange}: Props) {
     return (
         <>
             <Modal isOpen={isOpen} onOpenChange={onOpenChange}>

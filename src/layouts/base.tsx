@@ -10,7 +10,7 @@ if (!PUBLISHABLE_KEY) {
   throw new Error("Missing Publishable Key");
 }
 
-export default function RootLayout() {
+export default function BaseLayout() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch()
 

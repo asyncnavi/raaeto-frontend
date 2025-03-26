@@ -3,20 +3,20 @@ import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import HomePage from "./pages/home/page";
-import RootLayout from "./pages/layout";
-import AuthLayout from "./pages/authentication/layout";
+import BaseLayout from "./layouts/base.tsx";
+import AuthLayout from "./layouts/auth.tsx";
 import SigninPage from "./pages/authentication/signIn.tsx";
 import SignupPage from "./pages/authentication/signUp.tsx";
 import { Provider } from "react-redux";
 import { store } from "./store";
-import DashboardLayout from "./pages/dashboard/layout";
-import ProductList from "./pages/product/list.tsx";
-import ProductDetail from "./pages/product/detail.tsx";
+import OrganizationLayout from "./layouts/organization.tsx";
 import {HeroUIProvider} from "@heroui/react";
+import OrganizationDashboard from "./pages/organization/dashboard.tsx";
+import SingleProductPage from "./pages/organization/products/single.tsx";
 
 const router = createBrowserRouter([
   {
-    element: <RootLayout />,
+    element: <BaseLayout />,
     children: [
       { path: "/", element: <HomePage /> },
       {
@@ -28,19 +28,19 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: "/dashboard",
-        element: <DashboardLayout />,
+        path: "/o",
+        element: <OrganizationLayout />,
         children: [
           {
             path: "",
-            element: <ProductList />,
+            element: <OrganizationDashboard />,
+          },
+          {
+            path: "product/:id",
+            element : <SingleProductPage />
           },
         ],
-      },
-      {
-        path: "/product/:id",
-        element : <ProductDetail />
-      },
+      }
     ],
   },
 ]);

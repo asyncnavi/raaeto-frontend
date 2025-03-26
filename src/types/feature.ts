@@ -4,9 +4,8 @@ export enum FeatureStatus {
     Pending = 'pending'
 }
 
-
 export type Feature = {
-    id  :string ,
+    id :string ,
     organization_id: string;
     product_id: string;
     name: string;
