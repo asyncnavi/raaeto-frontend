@@ -1,6 +1,6 @@
 import { Outlet, useNavigate } from "react-router-dom";
 import { ClerkProvider } from "@clerk/clerk-react";
-import {useEffect} from "react";
+import  {useEffect} from "react";
 import {useAppDispatch} from "../store";
 import {fetchOrganization} from "../store/slices/organization.ts";
 
@@ -10,13 +10,13 @@ if (!PUBLISHABLE_KEY) {
   throw new Error("Missing Publishable Key");
 }
 
-export default function RootLayout() {
+export default function BaseLayout() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    dispatch(fetchOrganization())
-  }, [dispatch]);
+    dispatch(fetchOrganization());
+  });
 
   return (
     <ClerkProvider
@@ -25,6 +25,8 @@ export default function RootLayout() {
       publishableKey={PUBLISHABLE_KEY}
     >
       <Outlet />
+
+
     </ClerkProvider>
   );
 }

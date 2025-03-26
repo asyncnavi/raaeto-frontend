@@ -4,9 +4,9 @@ import { useForm } from "react-hook-form";
 import { CreateProductForm as TCreateProductForm } from "../../types/product";
 import Nope from "nope-validator";
 import { nopeResolver } from "@hookform/resolvers/nope/src/nope.js";
-import { useCreateProduct } from "../../api/product";
-import LoadingOverlay from "../../ui/loadingOverlay";
+import LoadingOverlay from "@/components/common/loadingOverlay";
 import {Button, Input, Textarea} from "@heroui/react";
+import {useCreateProduct} from "../../api/organization.tsx";
 
 
 const formSchema = Nope.object().shape({
@@ -17,9 +17,9 @@ const formSchema = Nope.object().shape({
 })
 
 
-export const CreateProductForm: FC<{ organizationId: string }> = ({
-                                                               organizationId,
-                                                           }) => {
+export const ProductCreateForm: FC<{ organizationId: string }> = ({
+                                                                      organizationId,
+                                                                  }) => {
     const { register, formState, handleSubmit } = useForm<TCreateProductForm>({
         resolver: nopeResolver(formSchema),
     });
@@ -32,20 +32,20 @@ export const CreateProductForm: FC<{ organizationId: string }> = ({
 
     return (
         <form
-            onClick={handleSubmit(handleFormSubmission)}
+            onSubmit={handleSubmit(handleFormSubmission)}
             className="w-full flex flex-col space-y-4"
         >
             <LoadingOverlay loading={isLoading} />
             <Input label="Name" type="text" {...register("name")}
-                errorMessage={formState.errors.name && formState.errors.name?.message}
+                   errorMessage={formState.errors.name && formState.errors.name?.message}
             />
             <Textarea label="Description" {...register("description")}
-                       errorMessage={formState.errors.description && formState.errors.description?.message}
+                      errorMessage={formState.errors.description && formState.errors.description?.message}
             />
 
-           <Button type="submit" color="primary" endContent={<IconArrowRight />} >
-               Create Product
-           </Button>
+            <Button type="submit" color="primary" endContent={<IconArrowRight />} >
+                Create Product
+            </Button>
 
         </form>
     );

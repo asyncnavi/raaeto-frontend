@@ -4,7 +4,7 @@ import {
     ModalHeader,
     ModalBody,
 } from "@heroui/react";
-import {CreateProductForm} from "./createProductForm.tsx";
+import {ProductCreateForm} from "./productCreateForm.tsx";
 
 
 type AddProductModalProps = {
@@ -15,7 +15,7 @@ type AddProductModalProps = {
 }
 
 
-export default function CreateProductModal({isOpen, onOpenChange, organizationId}: AddProductModalProps) {
+export default function ProductCreateModal({isOpen, onOpenChange, organizationId}: AddProductModalProps) {
 
     return (
         <>
@@ -23,7 +23,7 @@ export default function CreateProductModal({isOpen, onOpenChange, organizationId
                 <ModalContent>
                     <ModalHeader className="flex flex-col gap-1">Create Product</ModalHeader>
                     <ModalBody>
-                        <CreateProductForm organizationId={organizationId}/>
+                        <ProductCreateForm organizationId={organizationId}/>
                     </ModalBody>
                 </ModalContent>
             </Modal>

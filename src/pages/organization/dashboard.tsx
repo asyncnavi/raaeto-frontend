@@ -1,37 +1,36 @@
-import {IconPlus} from "@tabler/icons-react";
-import {useGetUserOrganization, useGetProducts} from "../../api/organization";
-import ProductCard, {ProductCardSkeleton} from "./productCard.tsx";
 import {Button, useDisclosure} from "@heroui/react";
-import CreateProductModal from "./createProductModal.tsx";
+import {useSelector} from "react-redux";
+import {RootState} from "../../store";
+import {useGetProducts} from "../../api/organization.tsx";
+import {IconPlus} from "@tabler/icons-react";
+import ProductCard from "@/components/product/productCard.tsx";
+import ProductCardSkeleton from "@/components/product/productSkeleton.tsx";
+import ProductCreateModal from "@/components/product/productCreateModal.tsx";
 
-const ProductList = () => {
 
+const OrganizationProductList = () => {
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
+    const {id: orgId, status} = useSelector((state: RootState) => state.organization);
 
-    const {data: organization, isLoading} = useGetUserOrganization();
+    const {data: products, isLoading} = useGetProducts({
+        org_id: orgId ?? "",
+    }, {
+        skip: !orgId,
+    });
 
-    const orgId = organization?.id;
-
-    const {data: products} = useGetProducts(
-        {
-            organization_id: orgId as string,
-        },
-        {skip: !orgId},
-    );
-
-
+    if (status === "loading" || !orgId) {
+        return <p>Loading organization...</p>;
+    }
     return (
         <div className="space-y-10">
 
-            <CreateProductModal organizationId={organization?.id ?? ""} isOpen={isOpen} onOpen={onOpen}
+            <ProductCreateModal organizationId={orgId ?? ""} isOpen={isOpen} onOpen={onOpen}
                                 onOpenChange={onOpenChange}/>
 
             <div className="w-full flex justify-end">
-
                 <Button onPress={onOpen} color="primary" startContent={<IconPlus/>}>
                     Create New Product
                 </Button>
-
             </div>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 px-4">
 
@@ -53,6 +52,13 @@ const ProductList = () => {
     );
 };
 
-export default ProductList;
+const OrganizationDashboard = () => {
+    return (
+        <div >
+            <h3 className="mx-4 text-xl font-bold">Dashboard</h3>
+            <OrganizationProductList/>
+        </div>
+    )
+}
 
-
+export default OrganizationDashboard

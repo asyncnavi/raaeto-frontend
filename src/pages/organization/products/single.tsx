@@ -1,15 +1,14 @@
 import { IconArrowLeft } from "@tabler/icons-react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useGetProduct } from "../../api/product";
-import LoadingOverlay from "../../ui/loadingOverlay";
-import { Product } from "../../types/product";
-import ProductFeatures from "./features/productFeatures.tsx";
-import Header from "../../shared/header.tsx";
 import {BreadcrumbItem, Breadcrumbs, Button,  Tab, Tabs} from "@heroui/react";
-import BasicProductDetails from "./basicProductDetails.tsx";
+import {useGetProduct} from "@/api/product";
+import {Product} from "@/types/product.ts";
+import ProductBasicDetail from "@/components/product/productBasicDetail.tsx";
+import FeatureListGrid from "@/components/feature/featureListGrid.tsx";
+import LoadingOverlay from "@/components/common/loadingOverlay.tsx";
 
 
-const ProductDetail = () => {
+const SingleProductPage = () => {
     const { id } = useParams();
 
     const { data : product, isLoading } = useGetProduct(
@@ -26,11 +25,9 @@ const ProductDetail = () => {
     }
     return (
         <div>
-            <Header />
 
             <main className="container mx-auto py-4 space-y-8">
                 <div className="flex items-center gap-2">
-
                     <Button isIconOnly onPress={() => navigate(-1)} variant="faded">
                         <IconArrowLeft/>
                     </Button>
@@ -40,14 +37,13 @@ const ProductDetail = () => {
                     </Breadcrumbs>
                 </div>
 
-
                 <div className="flex w-full flex-col">
                     <Tabs aria-label="Options">
                         <Tab key="details" title="Basic Details">
-                            <BasicProductDetails product={product as Product} />
+                            <ProductBasicDetail product={product as Product} />
                         </Tab>
                         <Tab key="features" title="Features">
-                            <ProductFeatures  />
+                            <FeatureListGrid  />
                         </Tab>
 
                         <Tab key="analytics" title="Analytics">
@@ -56,7 +52,6 @@ const ProductDetail = () => {
                         <Tab key="settings" title="Settings">
                             Heee
                         </Tab>
-
                     </Tabs>
                 </div>
             </main>
@@ -64,4 +59,4 @@ const ProductDetail = () => {
     );
 };
 
-export default ProductDetail;
+export default SingleProductPage;

@@ -6,7 +6,7 @@ type Props = {
     product: Product;
 };
 
-const BasicProductDetails: FC<Props> = ({ product }) => {
+const ProductBasicDetail: FC<Props> = ({ product }) => {
 
     const { register } = useForm<Product>({
         defaultValues: product,
@@ -33,11 +33,10 @@ const BasicProductDetails: FC<Props> = ({ product }) => {
                 <Input  {...register("created_at")} label="Created At"/>
                 <Input  {...register("updated_at")} label="Last Updation"/>
 
-
             </div>
 
         </div>
     );
 };
 
-export default BasicProductDetails;
+export default ProductBasicDetail;
