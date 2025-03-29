@@ -11,7 +11,7 @@ type AddProductModalProps = {
     isOpen: boolean;
     onOpen: () => void;
     onOpenChange: (isOpen: boolean) => void;
-    organizationId: string;
+    organizationId: number;
 }
 
 

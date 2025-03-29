@@ -17,7 +17,7 @@ const formSchema = Nope.object().shape({
 })
 
 
-export const ProductCreateForm: FC<{ organizationId: string }> = ({
+export const ProductCreateForm: FC<{ organizationId: number }> = ({
                                                                       organizationId,
                                                                   }) => {
     const { register, formState, handleSubmit } = useForm<TCreateProductForm>({

@@ -1,9 +1,9 @@
 import {
-    Product,
-} from "../types/product";
+    Product, ProductResponse, RatingResponse,
+} from "@/types/product";
 import {axiosBaseQuery, BASE_URL} from "../client";
 import {createApi} from "@reduxjs/toolkit/query/react";
-import {Feature} from "../types/feature.ts";
+import { FeatureResponse} from "@/types/feature.ts";
 
 export const productApi = createApi({
     reducerPath: "productApi",
@@ -13,13 +13,13 @@ export const productApi = createApi({
     tagTypes: ["Products"],
     endpoints: (build) => ({
 
-        getProduct: build.query<Product, { id: string }>({
-            query: (input) => ({
+        getProduct: build.query<Product, { product_id: number , organization_id : number }>({
+            query: ({ product_id, organization_id }) => ({
                 method: "GET",
-                url: `/${input.id}`,
+                url: `/${product_id}/${organization_id}`,
             }),
         }),
-        getAllProducts: build.query<Product[], void>({
+        getAllProducts: build.query<ProductResponse[], void>({
             query: () => (
                 {
                     method: "GET",
@@ -27,17 +27,25 @@ export const productApi = createApi({
                 }
             )
         }),
-        getProductFeatures: build.query<Feature[], { product_id: string }>({
-            query: ({product_id}) => ({
+        getProductFeatures: build.query<FeatureResponse[], { product_id: number , organization_id : number  }>({
+            query: ({product_id, organization_id }) => ({
                 method: "GET",
-                url: `/${product_id}/features`,
+                url: `/${product_id}/${organization_id}/features`,
+            })
+        }),
+        getRatings : build.query<RatingResponse[], { product_id : number , organization_id : number ; feature_id : number }>({
+            query : ({ product_id, organization_id , feature_id }) => ({
+                method : "GET",
+                url : `/${product_id}/${organization_id}/features/${feature_id}/ratings`
             })
         })
+
     }),
 });
 
 export const {
     useGetProductQuery: useGetProduct,
     useGetAllProductsQuery: useGetAllProducts,
-    useGetProductFeaturesQuery : useGetProductFeatures
+    useGetProductFeaturesQuery : useGetProductFeatures,
+    useGetRatingsQuery : useGetRatings
 } = productApi;

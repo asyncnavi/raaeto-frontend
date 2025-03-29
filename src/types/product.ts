@@ -1,15 +1,4 @@
-export type Product = {
-  id: string;
-  organization_id: string;
-  name: string;
-  description?: string;
-  logo_url?: string;
-  thumbnail_url?: string;
-  website_url?: string;
-  created_at: string;
-  updated_at: string;
-  deleted_at?: string;
-};
+
 
 export type CreateProduct = {
   organization_id: string;
@@ -36,6 +25,19 @@ export type UpdateProduct = {
 
 export type CreateProductForm = Omit<CreateProduct, "organization_id">;
 
+export type ProductResponse  = {
+    id: number;
+    name: string;
+    description?: string;
+    logo_url?: string;
+    thumbnail_url?: string;
+    organization_id: number;
+    website_url?: string;
+    created_at: string;
+    updated_at: string;
+}
+export type Product = ProductResponse
+
 export type CreateProductResponse = {
   id: string;
   organization_id: string;
@@ -43,4 +45,12 @@ export type CreateProductResponse = {
   description?: string;
   logoUrl?: string;
   thumbnail_url?: string;
+};
+
+
+export type RatingResponse = {
+    product_id: number;
+    feature_id: number;
+    rating_value: number;
+    comment?: string;
 };

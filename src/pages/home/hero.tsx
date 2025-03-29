@@ -1,28 +1,28 @@
 import {IconSearch} from "@tabler/icons-react";
+import {Button} from "@heroui/react";
 
 const Hero = () => {
     return (
-        <section className=" w-full  py-20 px-2 bg-lime-100">
+        <section className=" w-full  py-20 px-2 bg-green-200 ">
 
             <div className="container mx-auto flex flex-col justify-center items-center gap-10">
-                <h1 className="text-5xl font-semibold">
+                <h1 className="text-5xl font-semibold dark:text-black">
                     Where Features meets their Stars.
                 </h1>
-                <p>
+                <p className="dark:text-black">
                     Discover the best software and services, guided by real user
                     reviews{" "}
                 </p>
                 <div
-                    className="w-full max-w-[600px] mx-auto flex justify-center border-2 border-black p-2 bg-white rounded-md">
+                    className="w-full max-w-[600px] mx-auto flex justify-center items-center  p-2 bg-white shadow-2xl rounded-md dark:bg-gray-300">
                     <input
-                        className="w-full py-4 px-2 outline-none border-0"
+                        className="w-full py-4 px-2 outline-none border-0  dark:bg-gray-300 dark:text-white"
                         placeholder="Search product or features..."
                     />
-                    <button
-                        className="outline-none border-2 border-black px-5 py-2 bg-lime-300 font-semibold rounded-md flex items-center gap-2">
-                        <IconSearch stroke={3} size={18}/>
-                        Search
-                    </button>
+
+                    <Button color="success" variant="ghost" startContent={<IconSearch size={32} stroke={3}/>}>Search
+                    </Button>
+
                 </div>
             </div>
         </section>

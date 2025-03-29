@@ -4,21 +4,21 @@ export enum FeatureStatus {
     Pending = 'pending'
 }
 
-export type Feature = {
-    id :string ,
-    organization_id: string;
-    product_id: string;
+
+export type FeatureResponse =  {
+    id: number;
+    organization_id: number;
+    product_id: number;
     name: string;
     description?: string;
-    videoUrl?: string;
+    video_url?: string;
     thumbnail_url?: string;
-    status: FeatureStatus;
+    status?: string;
     created_at: string;
     updated_at: string;
-    deleted_at?: string;
-};
+}
 
-
+export type Feature = FeatureResponse
 export type FeatureCreateFields = {
     name: string
     description: string

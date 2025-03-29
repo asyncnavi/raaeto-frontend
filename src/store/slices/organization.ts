@@ -1,10 +1,15 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { authClient, BASE_URL } from "../../client";
-import { Organization } from "../../api/organization.tsx";
+import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {authClient, BASE_URL} from "../../client";
+import {OrganizationResponse, Organization} from "@/types/organization.ts";
 
 type OrganizationState = {
-    id: string | null;
+    id: number | null;
     name: string | null;
+    description: string | null;
+    user_id: number | null;
+    logo_url?: string | null;
+    created_at: string | null;
+    updated_at: string | null;
     status: "idle" | "loading" | "failed" | "success";
     error: string | null;
 };
@@ -12,13 +17,18 @@ type OrganizationState = {
 const initialState: OrganizationState = {
     id: null,
     name: null,
+    description: null,
+    user_id: null,
+    logo_url: null,
+    created_at: null,
+    updated_at: null,
     status: "idle",
     error: null,
 };
 
 export const fetchOrganization = createAsyncThunk(
     "organization/fetch",
-    async (_, { fulfillWithValue, rejectWithValue }) => {
+    async (_, {fulfillWithValue, rejectWithValue}) => {
         try {
             const response = await authClient.get<Organization>(BASE_URL + "/org/me");
             return fulfillWithValue(response);
@@ -44,11 +54,15 @@ export const organizationSlice = createSlice({
                 state.status = "failed";
                 state.error = action.payload as string;
             })
-            .addCase(fetchOrganization.fulfilled, (state, action: PayloadAction<Organization>) => {
+            .addCase(fetchOrganization.fulfilled, (state, action: PayloadAction<OrganizationResponse>) => {
                 state.status = "success";
-                console.log(action)
                 state.id = action.payload.id;
                 state.name = action.payload.name;
+                state.description = action.payload.description ?? null;
+                state.user_id = action.payload.user_id;
+                state.logo_url = action.payload.logo_url;
+                state.created_at = action.payload.created_at;
+                state.updated_at = action.payload.updated_at;
                 state.error = null;
             });
     },

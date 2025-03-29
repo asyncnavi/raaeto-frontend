@@ -7,19 +7,15 @@ import {
   Link,
   Image,
 } from "@heroui/react";
+import {Product} from "@/types/product.ts";
 
 type ProductCardProps = {
-  name: string;
-  description: string;
-  websiteURL?: string;
-  productId: string;
+  product : Product ;
   onClick?: () => void;
 };
 
 export default function ProductCard({
-  name,
-  description,
-  websiteURL = "https://github.com/heroui-inc/heroui",
+  product,
   onClick,
 }: ProductCardProps) {
   return (
@@ -33,17 +29,17 @@ export default function ProductCard({
           width={40}
         />
         <div className="flex flex-col">
-          <p className="text-md">{name}</p>
+          <p className="text-md">{product?.name}</p>
         </div>
       </CardHeader>
       <Divider />
       <CardBody>
-        <p>{description}</p>
+        <p>{product?.description}</p>
       </CardBody>
       <Divider />
       <CardFooter className="flex justify-between">
         <div onClick={onClick} className="text-blue-500 cursor-pointer">Details</div>
-        <Link isExternal showAnchorIcon color="success" href={websiteURL}>
+        <Link isExternal showAnchorIcon color="success" href={product?.website_url}>
           Website
         </Link>
       </CardFooter>

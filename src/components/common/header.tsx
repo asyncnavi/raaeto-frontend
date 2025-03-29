@@ -10,16 +10,20 @@ import {
     DropdownTrigger,
     DropdownMenu,
     DropdownItem, User,
-    Link as HeroLink
+    Link as HeroLink, Switch
 } from "@heroui/react";
 import {Link} from 'react-router-dom'
 import {useUser, useClerk } from "@clerk/clerk-react";
+import {useTheme} from "@heroui/use-theme";
+import {IconMoon, IconSun} from "@tabler/icons-react";
 
 
 export default function Header() {
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
     const {isSignedIn, user } = useUser();
     const { signOut } = useClerk();
+    const { theme, setTheme } = useTheme()
+
 
 
     return (
@@ -33,7 +37,6 @@ export default function Header() {
                     <Link to="/" className="font-bold text-2xl text-inherit">RateO</Link>
                 </NavbarBrand>
             </NavbarContent>
-
 
             {
                 !isSignedIn ? (<NavbarContent justify="end">
@@ -66,8 +69,22 @@ export default function Header() {
                                     <p className="font-semibold">Signed in as</p>
                                     <p className="font-semibold">{user?.primaryEmailAddress?.emailAddress}</p>
                                 </DropdownItem>
-                                <DropdownItem as={HeroLink} href="/dashboard" key="organization">Organization</DropdownItem>
-                                <DropdownItem key="team_settings">Preference</DropdownItem>
+                                <DropdownItem as={HeroLink} href="/o" key="organization">Organization</DropdownItem>
+                                <DropdownItem key="theme_switch">
+                                    <Switch
+                                        isSelected={theme=="dark"}
+                                        color="success"
+                                        endContent={<IconMoon />}
+                                        size="sm"
+                                        startContent={<IconSun/>}
+                                        onChange={(e) => {
+                                            setTheme(e.target.checked ? "dark" : "light")
+                                        }}
+                                    >
+                                        Dark mode
+                                    </Switch>
+                                </DropdownItem>
+
                                 <DropdownItem key="help_and_feedback">My Profile</DropdownItem>
                                 <DropdownItem onPress={() =>signOut()} key="logout" color="danger">
                                     Log Out

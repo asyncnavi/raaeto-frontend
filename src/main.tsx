@@ -13,6 +13,7 @@ import OrganizationLayout from "./layouts/organization.tsx";
 import {HeroUIProvider} from "@heroui/react";
 import OrganizationDashboard from "./pages/organization/dashboard.tsx";
 import SingleProductPage from "./pages/organization/products/single.tsx";
+import {ToastProvider} from "@heroui/toast";
 
 const router = createBrowserRouter([
   {
@@ -36,7 +37,7 @@ const router = createBrowserRouter([
             element: <OrganizationDashboard />,
           },
           {
-            path: "product/:id",
+            path: "products/:id",
             element : <SingleProductPage />
           },
         ],
@@ -48,7 +49,8 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Provider store={store}>
-      <HeroUIProvider>
+      <HeroUIProvider >
+        <ToastProvider placement="top-right" />
         <RouterProvider router={router} />
       </HeroUIProvider>
     </Provider>

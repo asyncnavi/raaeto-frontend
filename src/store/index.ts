@@ -4,12 +4,14 @@ import { useDispatch } from "react-redux";
 import { productApi } from "../api/product";
 import { featureApi } from "../api/feature.tsx";
 import { organizationSlice } from "./slices/organization.ts";
+import {ratingApi} from "@/api/ratings.tsx";
 
 export const store = configureStore({
   reducer: {
     [organizationApi.reducerPath]: organizationApi.reducer,
     [productApi.reducerPath]: productApi.reducer,
     [featureApi.reducerPath]: featureApi.reducer,
+    [ratingApi.reducerPath]: ratingApi.reducer,
     organization: organizationSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>

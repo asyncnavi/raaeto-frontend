@@ -6,25 +6,26 @@ import {IconPlus} from "@tabler/icons-react";
 import ProductCard from "@/components/product/productCard.tsx";
 import ProductCardSkeleton from "@/components/product/productSkeleton.tsx";
 import ProductCreateModal from "@/components/product/productCreateModal.tsx";
+import { useNavigate } from "react-router-dom";
 
 
 const OrganizationProductList = () => {
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
-    const {id: orgId, status} = useSelector((state: RootState) => state.organization);
+    const navigate = useNavigate()
+
+    const {id: organization_id} = useSelector((state: RootState) => state.organization);
 
     const {data: products, isLoading} = useGetProducts({
-        org_id: orgId ?? "",
+        organization_id : organization_id as number
     }, {
-        skip: !orgId,
+        skip: !organization_id,
     });
 
-    if (status === "loading" || !orgId) {
-        return <p>Loading organization...</p>;
-    }
+
     return (
         <div className="space-y-10">
 
-            <ProductCreateModal organizationId={orgId ?? ""} isOpen={isOpen} onOpen={onOpen}
+            <ProductCreateModal organizationId={organization_id as number} isOpen={isOpen} onOpen={onOpen}
                                 onOpenChange={onOpenChange}/>
 
             <div className="w-full flex justify-end">
@@ -37,13 +38,14 @@ const OrganizationProductList = () => {
                 {isLoading ? [1, 2, 3, 4, 5].map(() => {
                         return <ProductCardSkeleton/>
                     }) :
-                    products?.map(({id, name, description}) => {
+                    products?.map(product => {
                         return (
                             <ProductCard
-                                key={id}
-                                productId={id}
-                                name={name}
-                                description={description ?? ""}
+                                key={product.id}
+                                product={product}
+                                onClick={() => {
+                                    navigate(`products/${product.id}`)
+                                }}
                             />
                         );
                     })}
@@ -54,7 +56,7 @@ const OrganizationProductList = () => {
 
 const OrganizationDashboard = () => {
     return (
-        <div >
+        <div>
             <h3 className="mx-4 text-xl font-bold">Dashboard</h3>
             <OrganizationProductList/>
         </div>

@@ -1,11 +1,8 @@
 import {CreateProduct, CreateProductResponse, Product} from "../types/product";
 import {axiosBaseQuery, BASE_URL} from "../client";
 import { createApi} from "@reduxjs/toolkit/query/react";
+import {Organization} from "@/types/organization.ts";
 
-export interface Organization {
-    name: string;
-    id: string | null;
-}
 
 export const organizationApi = createApi({
     reducerPath: "organizationApi",
@@ -20,13 +17,13 @@ export const organizationApi = createApi({
                 url: "/me",
             }),
         }),
-        getProducts: build.query<Product[], { org_id : string }>({
-            query: ({org_id} ) => ({
+        getProducts: build.query<Product[], { organization_id : number }>({
+            query: () => ({
                 method: "GET",
-                url: `/${org_id}/products`,
+                url: `/products`,
             }),
             providesTags: (result, error, arg) =>
-                result ? [{ type: "Products", id: arg.org_id , error : error}] : [],
+                result ? [{ type: "Products", id: arg.organization_id , error : error}] : [],
         }),
         createOrganization: build.mutation<void, { name: string }>({
             query: (input) => ({
