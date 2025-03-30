@@ -9,23 +9,28 @@ export const featureApi = createApi({
     }),
     tagTypes: ["Features"],
     endpoints: (build) => ({
+        getFeatures: build.query<Feature[], { organization_id: number, product_id: number }>({
+            query: ({organization_id, product_id}) => ({
+                method: "GET",
+                url: `/${product_id}/${organization_id}`,
+            }),
+            providesTags: (result, _error, {product_id}) =>
+                result ? [{type: "Features", id: product_id}] : [],
+        }),
         createFeature: build.mutation<Feature, FeatureCreate>({
             query: (input) => ({
                 method: "POST",
                 url: "",
                 data: input,
             }),
-        }),
-        getFeatures: build.query<Feature[], { organization_id: string, product_id: string }>({
-            query: ({organization_id, product_id}) => ({
-                method: "GET",
-                url: `/${product_id}/${organization_id}`,
-            }),
+            invalidatesTags: (_result, _error, { product_id }) => [
+                { type: "Features", id: product_id },
+            ],
         }),
     }),
 });
 
 export const {
-    useCreateFeatureMutation: useCreateFeature,
-    useGetFeaturesQuery: useGetFeatures
+    useGetFeaturesQuery: useGetFeatures,
+    useCreateFeatureMutation: useCreateFeature
 } = featureApi;

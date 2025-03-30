@@ -5,7 +5,7 @@ export enum FeatureStatus {
 }
 
 
-export type FeatureResponse =  {
+export type FeatureResponse = {
     id: number;
     organization_id: number;
     product_id: number;
@@ -28,11 +28,10 @@ export type FeatureCreateFields = {
 }
 
 export type FeatureCreate = {
-    organization_id: string;
-    product_id: string;
+    organization_id: number;
+    product_id: number;
     name: string;
     description?: string;
-    videoUrl?: string;
-    thumbnailUrl?: string;
-    status?: FeatureStatus;
+    video_url?: string;
+    thumbnail_url?: string;
 }

@@ -8,7 +8,7 @@ export const ratingApi = createApi({
     baseQuery: axiosBaseQuery({
         baseUrl: BASE_URL + "/ratings",
     }),
-    tagTypes: ["Ratings"],
+    tagTypes: ["Ratings", "Product"],
     endpoints: (build) => ({
 
         createRating: build.mutation<RatingResponse, CreateRating>({
@@ -17,7 +17,7 @@ export const ratingApi = createApi({
                 url: "",
                 data: newRating,
             }),
-            invalidatesTags: ["Ratings"],
+            invalidatesTags: ["Ratings", "Product"],
         }),
     }),
 });

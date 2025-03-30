@@ -4,8 +4,10 @@ import {useParams} from "react-router-dom";
 import {FC} from "react";
 import {useGetProductFeatures} from "../../api/product.tsx";
 import FeatureCreateModal from "./featureCreateModal.tsx";
-import {Feature} from "../../types/feature.ts";
+import {Feature} from "@/types/feature.ts";
 import FeatureCard from "./featureCard.tsx";
+import {useSelector} from "react-redux";
+import {RootState} from "@/store/index.ts";
 
 
 type FeaturesGridProps = {
@@ -14,35 +16,29 @@ type FeaturesGridProps = {
 
 const FeaturesGrid: FC<FeaturesGridProps> = ({features}) => {
 
-
     return (
         <div className="grid grid-cols-4 gap-4">
             {
                 features?.map((feature) => {
-                    return <FeatureCard key={feature.id} name={feature.name}
-                                        description={feature?.description ?? ''}
-                                        id={feature.id}
-                    />
+                    return <FeatureCard key={feature.id}  feature={feature} />
                 })
             }
-
         </div>
     )
 }
 
 const FeatureListGrid = () => {
-    // const [file, setFile] = useState(null)
-
-
+    const {id: organization_id} = useSelector((state: RootState) => state.organization)
     const {id: productId} = useParams()
 
 
-    const {data: features} = useGetProductFeatures({
-        product_id: productId as string
+    const {data: features } = useGetProductFeatures({
+        product_id: parseInt(productId as string),
+        organization_id: organization_id as number
     }, {
         skip: !productId
     })
-    const {isOpen, onOpen, onOpenChange} = useDisclosure()
+    const {isOpen, onOpen, onOpenChange, onClose} = useDisclosure()
     //
     //
     // const handleFileUpload = async (event) => {
@@ -66,10 +62,14 @@ const FeatureListGrid = () => {
     //     setFile(event.target.files[0])
     // }
 
+
+
     return (
 
         <div>
-            <FeatureCreateModal isOpen={isOpen} onOpen={onOpen} onOpenChange={onOpenChange}/>
+            <FeatureCreateModal afterCreate={() => {
+                onClose();
+            }} isOpen={isOpen} onOpen={onOpen} onOpenChange={onOpenChange}/>
             <div className="w-full flex justify-end">
                 <Button onPress={onOpen} endContent={<IconPlus/>} variant="solid" color="primary">
                     Create Feature

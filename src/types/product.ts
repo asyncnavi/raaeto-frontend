@@ -1,7 +1,6 @@
 
 
 export type CreateProduct = {
-  organization_id: string;
   name: string;
   description?: string;
   logo_url?: string;
@@ -49,6 +48,9 @@ export type CreateProductResponse = {
 
 
 export type RatingResponse = {
+    id : number;
+    user_id : number;
+    username : number;
     product_id: number;
     feature_id: number;
     rating_value: number;

@@ -11,11 +11,11 @@ type AddProductModalProps = {
     isOpen: boolean;
     onOpen: () => void;
     onOpenChange: (isOpen: boolean) => void;
-    organizationId: number;
+    afterCreate : () => void
 }
 
 
-export default function ProductCreateModal({isOpen, onOpenChange, organizationId}: AddProductModalProps) {
+export default function ProductCreateModal({isOpen, onOpenChange, afterCreate}: AddProductModalProps) {
 
     return (
         <>
@@ -23,7 +23,7 @@ export default function ProductCreateModal({isOpen, onOpenChange, organizationId
                 <ModalContent>
                     <ModalHeader className="flex flex-col gap-1">Create Product</ModalHeader>
                     <ModalBody>
-                        <ProductCreateForm organizationId={organizationId}/>
+                        <ProductCreateForm afterCreate={afterCreate} />
                     </ModalBody>
                 </ModalContent>
             </Modal>

@@ -31,7 +31,8 @@
       "@/store/*": ["store/*"],
       "@/styles/*": ["styles/*"],
       "@/utils/*": ["utils/*"],
-      "@/types/*": ["types/*"]
+      "@/types/*": ["types/*"],
+      "@/client/*": ["client/*"]
     }
   },
   "include": ["vite.config.ts"]

@@ -19,7 +19,7 @@ const RateInput: FC<RateInputProps> = ({onSelect}) => {
         <div>
             <div className="flex space-x-2">
                 {[1, 2, 3, 4, 5].map((i) => (
-                    <button
+                    <div
                         key={i}
                         className="focus:outline-none"
                         onMouseEnter={() => setHoverValue(i)}
@@ -29,7 +29,7 @@ const RateInput: FC<RateInputProps> = ({onSelect}) => {
                         {hoverValue !== null ? (hoverValue >= i ? <IconStarFilled className="text-yellow-400"/> :
                                 <IconStar/>)
                             : (selectedValue >= i ? <IconStarFilled className="text-yellow-400"/> : <IconStar/>)}
-                    </button>
+                    </div>
                 ))}
             </div>
         </div>

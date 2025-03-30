@@ -1,18 +1,15 @@
 import {Card, CardBody, CardFooter, CardHeader, Divider, Link} from "@heroui/react";
+import {Feature} from "@/types/feature.ts";
 
 
 type FeatureCardProps = {
-    name: string;
-    description: string;
-    websiteURL?: string;
-    id: string;
+    feature: Feature
     onClick?: () => void
 
 }
 
 export default function FeatureCard({
-                                        name,
-                                        description,
+                                        feature: {name, description},
                                         onClick,
                                     }: FeatureCardProps) {
     return (

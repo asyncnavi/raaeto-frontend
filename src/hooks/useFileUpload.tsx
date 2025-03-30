@@ -5,7 +5,7 @@ const useFileUpload = () => {
     const [file, setFile] = useState<File | null>(null);
     const [isUploading, setIsUploading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [response, setResponse] = useState<never>(null);
+    const [response, setResponse] = useState<{ url : string } | null>(null);
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files[0]) {
@@ -26,14 +26,14 @@ const useFileUpload = () => {
         setError(null);
 
         try {
-            const response = await authClient.post(BASE_URL + "/upload", formData, {
+            const response = await authClient.post(BASE_URL + "/uploads", formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
             });
             setResponse(response.data);
         } catch (error) {
-            setError("Error uploading file");
+            setError(`Error uploading file ${JSON.stringify(error)}`);
         } finally {
             setIsUploading(false);
         }

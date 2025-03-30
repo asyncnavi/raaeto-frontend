@@ -1,6 +1,6 @@
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {authClient, BASE_URL} from "../../client";
-import {OrganizationResponse, Organization} from "@/types/organization.ts";
+import {OrganizationResponse} from "@/types/organization.ts";
 
 type OrganizationState = {
     id: number | null;
@@ -30,9 +30,11 @@ export const fetchOrganization = createAsyncThunk(
     "organization/fetch",
     async (_, {fulfillWithValue, rejectWithValue}) => {
         try {
-            const response = await authClient.get<Organization>(BASE_URL + "/org/me");
-            return fulfillWithValue(response);
-        } catch (error: any) {
+            const response = await authClient.get<OrganizationResponse>(BASE_URL + "/org/me");
+            return fulfillWithValue(response.data);
+        } catch (error: unknown) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
             return rejectWithValue(error?.response?.data?.message || "Failed to fetch organization"); // ✅ Proper error handling
         }
     }
@@ -54,7 +56,7 @@ export const organizationSlice = createSlice({
                 state.status = "failed";
                 state.error = action.payload as string;
             })
-            .addCase(fetchOrganization.fulfilled, (state, action: PayloadAction<OrganizationResponse>) => {
+            .addCase(fetchOrganization.fulfilled, (state, action: PayloadAction<OrganizationResponse, string>) => {
                 state.status = "success";
                 state.id = action.payload.id;
                 state.name = action.payload.name;

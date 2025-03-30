@@ -7,5 +7,10 @@ export type OrganizationResponse =  {
     created_at: string;
     updated_at: string;
 }
+export type CreateOrganization = {
+    name: string;
+    description?: string;
+    logo_url?: string;
+};
 
 export type Organization = OrganizationResponse

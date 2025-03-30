@@ -8,6 +8,7 @@ import FeatureListGrid from "@/components/feature/featureListGrid.tsx";
 import LoadingOverlay from "@/components/common/loadingOverlay.tsx";
 import {useSelector} from "react-redux";
 import {RootState} from "@/store/index.ts";
+import ProductSettings from "@/components/product/productSettings.tsx";
 
 
 const SingleProductPage = () => {
@@ -52,12 +53,8 @@ const SingleProductPage = () => {
                         <Tab key="features" title="Features">
                             <FeatureListGrid/>
                         </Tab>
-
-                        <Tab key="analytics" title="Analytics">
-                            Analytics
-                        </Tab>
                         <Tab key="settings" title="Settings">
-                            Heee
+                            <ProductSettings product={product as Product} />
                         </Tab>
                     </Tabs>
                 </div>

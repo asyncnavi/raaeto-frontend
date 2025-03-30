@@ -1,4 +1,3 @@
-
 import {
     Modal,
     ModalContent,
@@ -7,29 +6,42 @@ import {
 } from "@heroui/react";
 import {IconArrowRight} from "@tabler/icons-react";
 import {useForm} from "react-hook-form";
-import Nope from "nope-validator";
-import {nopeResolver} from "@hookform/resolvers/nope";
 import {useSelector} from "react-redux";
 import {useParams} from "react-router-dom";
-import {FeatureCreateFields, FeatureStatus} from "../../types/feature.ts";
-import {RootState} from "../../store";
-import {useCreateFeature} from "../../api/feature.tsx";
+import {FeatureCreateFields, FeatureStatus} from "@/types/feature.ts";
+import {RootState} from "@/store/index.tsx";
+import {useCreateFeature} from "@/api/feature.tsx";
+import {addToast} from "@heroui/toast";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 
+
+const formSchema = z.object({
+    name: z.string()
+        .min(2, "Feature Name should be a minimum of 2 letters")
+        .max(256, "Feature Name cannot exceed 256 letters")
+        .nonempty("Name of feature is required"),
+    description: z.string().nonempty("Please add a description for the feature"),
+    video_url: z.string().optional(),
+    thumbnail_url: z.string().optional(),
+    status: z.string()
+});
 
 type Props = {
     isOpen: boolean;
     onOpen: () => void;
     onOpenChange: (isOpen: boolean) => void;
+    afterCreate : () => void;
 }
 
-export default function FeatureCreateModal({isOpen, onOpenChange}: Props) {
+export default function FeatureCreateModal({isOpen, onOpenChange, afterCreate}: Props) {
     return (
         <>
             <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
                 <ModalContent>
                     <ModalHeader className="flex flex-col gap-1">Create New Feature</ModalHeader>
                     <ModalBody>
-                        <CreateFeatureForm />
+                        <CreateFeatureForm afterCreate={afterCreate} />
                     </ModalBody>
                 </ModalContent>
             </Modal>
@@ -38,38 +50,43 @@ export default function FeatureCreateModal({isOpen, onOpenChange}: Props) {
 }
 
 
-const formSchema = Nope.object().shape({
-    name: Nope.string().required("Name of feature is required")
-        .min(2, "Feature Name should minimum of 2 letters")
-        .max(256, "Feature Name cannot exceed 256 letters."),
-    description: Nope.string().required("Please add description for feature"),
-    video_url: Nope.string(),
-    thumbnail_url: Nope.string(),
-    status: Nope.string()
-})
-
-const CreateFeatureForm = () => {
+const CreateFeatureForm = ({ afterCreate} : {afterCreate : () => void }) => {
 
     const {register, formState, handleSubmit} = useForm<FeatureCreateFields>({
         defaultValues: {
             status: FeatureStatus.Active,
         },
-        resolver: nopeResolver(formSchema),
+        resolver: zodResolver(formSchema),
 
     })
 
-    const { id : productId } = useParams()
+    const {id: productId} = useParams()
 
     const [createFeature] = useCreateFeature()
     const {id: organizationId} = useSelector((root: RootState) => root.organization)
 
 
     const handleFormSubmission = async (values: FeatureCreateFields) => {
-        createFeature({
-            ...values,
-            organization_id: organizationId?.toString() as string,
-            product_id: productId?.toString() as string
-        })
+
+        try {
+            createFeature({
+                ...values,
+                organization_id: organizationId as number,
+                product_id: parseInt(productId as string)
+            })
+            addToast({
+                title : "Feature created successfully",
+                color : "success"
+            })
+            afterCreate()
+        } catch (e) {
+            addToast({
+                title : "Something went wrong",
+                description : JSON.stringify(e),
+                color : "danger"
+            })
+        }
+
     }
 
 

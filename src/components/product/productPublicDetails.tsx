@@ -8,7 +8,7 @@ import {
     Button,
     Image, Divider, Link, Accordion, AccordionItem, Chip, Input,
     Tabs,
-    Tab,
+    Tab, User,
 } from "@heroui/react";
 import {addToast} from "@heroui/toast";
 
@@ -23,6 +23,7 @@ import {useCreateRating} from "@/api/ratings.tsx";
 import {useSelector} from "react-redux";
 import {RootState} from "@/store/index.ts";
 import {Feature} from "@/types/feature.ts";
+import RatingStars from "@/components/rating/ratingStars.tsx";
 
 
 type Props = {
@@ -65,16 +66,46 @@ function FeatureRatings({feature}: { feature: Feature }) {
 
                 }
             )
+            return
         }
-        await rateFeature({
-            user_id: user_id as number,
-            organization_id: feature.organization_id,
-            product_id: feature.product_id,
-            feature_id: feature.id,
-            rating_value: formData.rating,
-            comment: formData.comment,
-        });
-        reset();
+
+        if (formData.rating == 0) {
+            addToast(
+                {
+                    title: "Please rate from 1 star to 5",
+                    color: "warning",
+                }
+            )
+            return
+        }
+
+        try {
+            await rateFeature({
+                user_id: user_id as number,
+                organization_id: feature.organization_id,
+                product_id: feature.product_id,
+                feature_id: feature.id,
+                rating_value: formData.rating,
+                comment: formData.comment,
+            })
+            addToast(
+                {
+                    title: "Rated successfully",
+                    color: "success",
+                }
+            )
+            setValue("rating", 0)
+            reset();
+        } catch (e) {
+            addToast(
+                {
+                    title: "Error while rating please try again.",
+                    description: JSON.stringify(e),
+                    color: "danger",
+                }
+            )
+        }
+
     };
 
     return (
@@ -83,7 +114,10 @@ function FeatureRatings({feature}: { feature: Feature }) {
                 Rate
             </Chip>
             <div className="flex justify-between items-center gap-2 px-2 py-2">
-                <small className="text-xs italic">4.5 Average / 200 people rated.</small>
+                <small
+                    className="text-xs italic">{ratings && (ratings.reduce((acc, rating) => acc + rating.rating_value, 0) / (ratings.length || 1)).toFixed(1)} Average
+                    Rating / {ratings?.length ?? 0} people rated.</small>
+
             </div>
             <form onSubmit={handleSubmit((data) => onSubmit(data))}>
                 <div className="space-y-2">
@@ -114,9 +148,19 @@ function FeatureRatings({feature}: { feature: Feature }) {
                     <div>
                         {ratings?.map((rating) => {
                             return (
-                                <div>
-                                    {rating.comment}
-                                    {rating.rating_value}
+                                <div className="space-y-10 flex justify-between">
+                                    <User
+                                        avatarProps={{
+                                            src: "https://i.pravatar.cc/150?u=a04258114e29026702d",
+                                        }}
+                                        description={rating.comment}
+                                        name={rating?.username || "Unknown"}
+                                    />
+                                    <div className="flex">
+                                        <RatingStars ratingValue={rating.rating_value}/>
+                                    </div>
+
+
                                 </div>
                             )
                         })}
@@ -129,7 +173,6 @@ function FeatureRatings({feature}: { feature: Feature }) {
 
 
 function ProductFeatures({product}: { product: Product }) {
-
 
     const {data: features} = useGetProductFeatures({
         product_id: product.id,
