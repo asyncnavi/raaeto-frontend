@@ -2,7 +2,9 @@ import axios, { AxiosRequestConfig, AxiosError } from "axios";
 
 
 
-export const BASE_URL = import.meta.env.BASE_URL;
+export const BASE_URL = import.meta.env.VITE_BASE_URL;
+
+
 
 const authClient = axios.create({
     baseURL: BASE_URL,
