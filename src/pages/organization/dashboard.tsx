@@ -1,6 +1,4 @@
 import { Button, useDisclosure } from "@heroui/react";
-import { useSelector } from "react-redux";
-import { RootState } from "../../store";
 import {
   useGetProducts,
   useGetUserOrganization,
