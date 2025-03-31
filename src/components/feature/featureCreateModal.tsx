@@ -6,14 +6,13 @@ import {
 } from "@heroui/react";
 import {IconArrowRight} from "@tabler/icons-react";
 import {useForm} from "react-hook-form";
-import {useSelector} from "react-redux";
 import {useParams} from "react-router-dom";
 import {FeatureCreateFields, FeatureStatus} from "@/types/feature.ts";
-import {RootState} from "@/store/index.tsx";
 import {useCreateFeature} from "@/api/feature.tsx";
 import {addToast} from "@heroui/toast";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { useGetUserOrganization } from "@/api/organization";
 
 
 const formSchema = z.object({
@@ -63,7 +62,7 @@ const CreateFeatureForm = ({ afterCreate} : {afterCreate : () => void }) => {
     const {id: productId} = useParams()
 
     const [createFeature] = useCreateFeature()
-    const {id: organizationId} = useSelector((root: RootState) => root.organization)
+    const {data } = useGetUserOrganization()
 
 
     const handleFormSubmission = async (values: FeatureCreateFields) => {
@@ -71,7 +70,7 @@ const CreateFeatureForm = ({ afterCreate} : {afterCreate : () => void }) => {
         try {
             createFeature({
                 ...values,
-                organization_id: organizationId as number,
+                organization_id: data?.id as number,
                 product_id: parseInt(productId as string)
             })
             addToast({

@@ -6,8 +6,7 @@ import {useGetProductFeatures} from "../../api/product.tsx";
 import FeatureCreateModal from "./featureCreateModal.tsx";
 import {Feature} from "@/types/feature.ts";
 import FeatureCard from "./featureCard.tsx";
-import {useSelector} from "react-redux";
-import {RootState} from "@/store/index.ts";
+import { useGetUserOrganization } from "@/api/organization.tsx";
 
 
 type FeaturesGridProps = {
@@ -28,40 +27,19 @@ const FeaturesGrid: FC<FeaturesGridProps> = ({features}) => {
 }
 
 const FeatureListGrid = () => {
-    const {id: organization_id} = useSelector((state: RootState) => state.organization)
+    
     const {id: productId} = useParams()
 
+    const { data } = useGetUserOrganization()
 
     const {data: features } = useGetProductFeatures({
         product_id: parseInt(productId as string),
-        organization_id: organization_id as number
+        organization_id: data?.id as number
     }, {
-        skip: !productId
+        skip: !productId || !data?.id
     })
     const {isOpen, onOpen, onOpenChange, onClose} = useDisclosure()
-    //
-    //
-    // const handleFileUpload = async (event) => {
-    //
-    //     const formData = new FormData();
-    //     formData.append("image", file);
-    //
-    //     try {
-    //         const response = await authClient.post(BASE_URL + "/upload", formData, {
-    //             headers: {
-    //                 "Content-Type": "multipart/form-data",
-    //             },
-    //         });
-    //         console.log("File uploaded successfully:", response.data);
-    //     } catch (error) {
-    //         console.error("Error uploading file:", error);
-    //     }
-    // };
-    //
-    // const handleFileChange = (event: any) => {
-    //     setFile(event.target.files[0])
-    // }
-
+ 
 
 
     return (
@@ -76,15 +54,8 @@ const FeatureListGrid = () => {
                 </Button>
 
             </div>
-
-
             <FeaturesGrid features={features ?? []}/>
-            {/*<div className="grid grid-cols-4 gap-4">*/}
-            {/*    <Input  onChange={handleFileChange} type="file" label="Upload File"/>*/}
-            {/*    <Button onPress={handleFileUpload} color="primary">Upload</Button>*/}
-            {/*</div>*/}
-
-
+        
         </div>
     );
 };
