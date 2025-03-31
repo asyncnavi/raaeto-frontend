@@ -3,25 +3,25 @@ import {authClient, BASE_URL} from "../../client";
 import {OrganizationResponse} from "@/types/organization.ts";
 
 type OrganizationState = {
-    id: number | null;
-    name: string | null;
-    description: string | null;
-    user_id: number | null;
-    logo_url?: string | null;
-    created_at: string | null;
-    updated_at: string | null;
+    id: number | undefined;
+    name: string | undefined;
+    description: string | undefined;
+    user_id: number | undefined;
+    logo_url?: string | undefined;
+    created_at: string | undefined;
+    updated_at: string | undefined;
     status: "idle" | "loading" | "failed" | "success";
     error: string | null;
 };
 
 const initialState: OrganizationState = {
-    id: null,
-    name: null,
-    description: null,
-    user_id: null,
-    logo_url: null,
-    created_at: null,
-    updated_at: null,
+    id: undefined,
+    name: undefined,
+    description: undefined,
+    user_id: undefined,
+    logo_url: undefined,
+    created_at: undefined,
+    updated_at: undefined,
     status: "idle",
     error: null,
 };
@@ -48,8 +48,8 @@ export const organizationSlice = createSlice({
         builder
             .addCase(fetchOrganization.pending, (state) => {
                 state.status = "loading";
-                state.id = null;
-                state.name = null;
+                state.id = undefined;
+                state.name = undefined;
                 state.error = null;
             })
             .addCase(fetchOrganization.rejected, (state, action) => {
@@ -58,13 +58,13 @@ export const organizationSlice = createSlice({
             })
             .addCase(fetchOrganization.fulfilled, (state, action: PayloadAction<OrganizationResponse, string>) => {
                 state.status = "success";
-                state.id = action.payload.id;
-                state.name = action.payload.name;
-                state.description = action.payload.description ?? null;
-                state.user_id = action.payload.user_id;
-                state.logo_url = action.payload.logo_url;
-                state.created_at = action.payload.created_at;
-                state.updated_at = action.payload.updated_at;
+                state.id = action.payload?.id;
+                state.name = action.payload?.name;
+                state.description = action.payload?.description;
+                state.user_id = action.payload?.user_id;
+                state.logo_url = action.payload?.logo_url;
+                state.created_at = action.payload?.created_at;
+                state.updated_at = action.payload?.updated_at;
                 state.error = null;
             });
     },
