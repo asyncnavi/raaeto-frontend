@@ -1,9 +1,9 @@
 import axios, { AxiosRequestConfig, AxiosError } from "axios";
-
+import { Clerk } from "@clerk/clerk-js";
 
 
 export const BASE_URL = import.meta.env.VITE_BASE_URL;
-
+const clerk = new Clerk(import.meta.env.VITE_CLERK_PUBLISHABLE_KEY)
 
 
 const authClient = axios.create({
@@ -12,7 +12,13 @@ const authClient = axios.create({
 });
 
 authClient.interceptors.request.use(
-    (config) => {
+    async (config) => {
+        await clerk.load()
+        const token = await clerk.session?.getToken(); 
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+          }
+    
         return config;
     },
     (error) => {
