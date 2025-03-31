@@ -6,20 +6,20 @@ import {Product} from "@/types/product.ts";
 import ProductBasicDetail from "@/components/product/productBasicDetail.tsx";
 import FeatureListGrid from "@/components/feature/featureListGrid.tsx";
 import LoadingOverlay from "@/components/common/loadingOverlay.tsx";
-import {useSelector} from "react-redux";
-import {RootState} from "@/store/index.ts";
 import ProductSettings from "@/components/product/productSettings.tsx";
+import { useGetUserOrganization } from "@/api/organization";
 
 
 const SingleProductPage = () => {
     const {id} = useParams();
-    const {id : organization_id} = useSelector((state: RootState) => state.organization)
+      
 
+    const { data } = useGetUserOrganization()
 
     const {data: product, isLoading} = useGetProduct(
         {
             product_id: parseInt(id as string),
-            organization_id: organization_id as number
+            organization_id: data?.id as number
         },
         {
             skip: !id,
